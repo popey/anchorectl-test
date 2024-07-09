@@ -67,7 +67,7 @@ jobs:
         
     - name: Install Latest anchorectl Binary
       run: |
-        curl -sSfL https://anchorectl-releases.anchore.io/anchorectl/install.sh | sh -s -- -b ${HOME}/.local/bin
+        curl -sSfL https://anchorectl-releases.anchore.io/anchorectl/install.sh | sh -s -- -b ${HOME}/.local/bin v5.7.0
         export PATH="${HOME}/.local/bin/:${PATH}"
         
     - name: Connectivity Check
