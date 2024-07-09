@@ -20,8 +20,8 @@ env:
   ANCHORECTL_PASSWORD: ${{ secrets.ANCHORECTL_PASSWORD }}
   ## set ANCHORECTL_FAIL_BASED_ON_RESULTS to true if you want to break the pipeline based on the evaluation
   ANCHORECTL_FAIL_BASED_ON_RESULTS: false
-  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  ## DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+  ## DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   REGISTRY: ghcr.io
      
 jobs:
