@@ -31,7 +31,8 @@ jobs:
     
     - name: "Set IMAGE environmental variables"
       run: |
-        echo "IMAGE=${REGISTRY}/${GITHUB_REPOSITORY}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
+        export DOCKER_USER="popeyanchore"
+        echo "IMAGE=${REGISTRY}/${DOCKER_USER}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
         
     - name: Checkout Code
       uses: actions/checkout@v3
@@ -62,7 +63,8 @@ jobs:
     
     - name: "Set IMAGE environmental variables"
       run: |
-        echo "IMAGE=${REGISTRY}/${GITHUB_REPOSITORY}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
+        export DOCKER_USER="popeyanchore"
+        echo "IMAGE=${REGISTRY}/${DOCKER_USER}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
         
     - name: Checkout Code
       uses: actions/checkout@v3

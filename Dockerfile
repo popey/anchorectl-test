@@ -2,7 +2,7 @@
 
 # use alpine:latest for a smaller image, but it often won't have any published CVEs
 FROM registry.access.redhat.com/ubi8-minimal:latest
-LABEL maintainer="alan@popey.com"
+LABEL maintainer="alan.pope@anchore.com"
 LABEL name="anchorectl-test"
 
 COPY eicarcom2.zip  log4j-core-2.14.1.jar /
