@@ -20,6 +20,8 @@ env:
   ANCHORECTL_PASSWORD: ${{ secrets.ANCHORECTL_PASSWORD }}
   ## set ANCHORECTL_FAIL_BASED_ON_RESULTS to true if you want to break the pipeline based on the evaluation
   ANCHORECTL_FAIL_BASED_ON_RESULTS: false
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   REGISTRY: ghcr.io
      
 jobs:
@@ -30,7 +32,7 @@ jobs:
     
     - name: "Set IMAGE environmental variables"
       run: |
-        echo "IMAGE=${REGISTRY}/${{ vars.DOCKERHUB_USERNAME }}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
+        echo "IMAGE=${REGISTRY}/${{GITHUB_REPOSITORY}}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
 
     - name: Checkout Code
       uses: actions/checkout@v3
@@ -39,8 +41,8 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ${{ env.REGISTRY }}
-        username: ${{ vars.DOCKERHUB_USERNAME}}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}      
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}      
       
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -59,7 +61,7 @@ jobs:
     
     - name: "Set IMAGE environmental variables"
       run: |
-        echo "IMAGE=${REGISTRY}/${{ vars.DOCKERHUB_USERNAME }}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
+        echo "IMAGE=${REGISTRY}/${{GITHUB_REPOSITORY}}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
         
     - name: Checkout Code
       ### only need to do this if you want to pass the dockerfile to Anchore during scanning
