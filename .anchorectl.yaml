@@ -1,7 +1,7 @@
   secret-search:
     cataloger:
       enabled: true
-      scope: AllLayers
+      scope: alllayers
     additional-patterns: {}
     exclude-pattern-names: []
     reveal-values: false
