@@ -9,6 +9,6 @@
   file-contents:
     cataloger:
       enabled: true
-      scope: Squashed
+      scope: squashed
     skip-files-above-size: 1048576
     globs: ['/etc/passwd', '/etc/os-release', '/usr/lib/os-release', '/image_build_timestamp']
