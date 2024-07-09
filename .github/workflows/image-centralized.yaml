@@ -1,0 +1,94 @@
+name: Anchore Enterprise Centralized Scan
+
+on:
+  ### UNCOMMENT THIS SECTION TO AUTOBUILD ON ANY PUSH
+  #push:
+  #  branches:
+  #    - main
+  ### UNCOMMENT THIS SECTION TO BUILD ON A REGULAR SCHEDULE
+  #schedule:
+  #  - cron: '38 23 */14 * *'
+  ### UNCOMMENT THIS SECTION TO ENABLE ON-DEMAND BUILDS
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'On-Demand Build'  
+
+env:
+  ANCHORECTL_URL: ${{ vars.ANCHORECTL_URL }}
+  ANCHORECTL_USERNAME: ${{ vars.ANCHORECTL_USERNAME }}
+  ANCHORECTL_PASSWORD: ${{ secrets.ANCHORECTL_PASSWORD }}
+  ## set ANCHORECTL_FAIL_BASED_ON_RESULTS to true if you want to break the pipeline based on the evaluation
+  ANCHORECTL_FAIL_BASED_ON_RESULTS: false
+  REGISTRY: ghcr.io
+
+
+jobs:
+
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: "Set IMAGE environmental variables"
+      run: |
+        echo "IMAGE=${REGISTRY}/${GITHUB_REPOSITORY}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
+        
+    - name: Checkout Code
+      uses: actions/checkout@v3
+      
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}      
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: build local container
+      uses: docker/build-push-action@v3
+      with:
+        tags: ${{ env.IMAGE }}
+        push: true
+        load: false
+
+
+  Anchore:
+    runs-on: ubuntu-latest
+    needs: Build
+
+    steps:
+    
+    - name: "Set IMAGE environmental variables"
+      run: |
+        echo "IMAGE=${REGISTRY}/${GITHUB_REPOSITORY}:${GITHUB_REF_NAME}" >> $GITHUB_ENV
+        
+    - name: Checkout Code
+      uses: actions/checkout@v3
+        
+    - name: Install Latest anchorectl Binary
+      run: |
+        curl -sSfL https://anchorectl-releases.anchore.io/anchorectl/install.sh | sh -s -- -b ${HOME}/.local/bin 
+        export PATH="${HOME}/.local/bin/:${PATH}"
+        
+    - name: Connectivity Check
+      run: |
+        anchorectl version
+        anchorectl system status
+        anchorectl feed list
+    
+    - name: Queue Image for Scanning by Anchore Enterprise
+      run: |
+       anchorectl image add --no-auto-subscribe --wait --dockerfile ./Dockerfile --force ${IMAGE} 
+                
+    - name: Pull Vulnerability List
+      run: |
+        anchorectl image vulnerabilities ${IMAGE} 
+        
+    - name: Pull Policy Evaluation
+      run: |
+        # set "ANCHORECTL_FAIL_BASED_ON_RESULTS=true" (see above in the "env:" section) to break the pipeline here if the 
+        # policy evaluation returns FAIL or add -f, --fail-based-on-results to this command for the same result
+        #
+        anchorectl image check --detail ${IMAGE}

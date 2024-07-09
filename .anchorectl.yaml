@@ -1,0 +1,14 @@
+  secret-search:
+    cataloger:
+      enabled: true
+      scope: AllLayers
+    additional-patterns: {}
+    exclude-pattern-names: []
+    reveal-values: false
+    skip-files-above-size: 1048576
+  file-contents:
+    cataloger:
+      enabled: true
+      scope: Squashed
+    skip-files-above-size: 1048576
+    globs: ['/etc/passwd', '/etc/os-release', '/usr/lib/os-release', '/image_build_timestamp']
