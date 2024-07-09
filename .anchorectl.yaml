@@ -1,9 +1,16 @@
   secret-search:
     cataloger:
       enabled: true
-      scope: alllayers
+      scope: squashed
     additional-patterns: {}
     exclude-pattern-names: []
+    reveal-values: false
+    skip-files-above-size: 1048576
+  content-search:
+    cataloger:
+      enabled: true
+      scope: squashed
+    patterns: {}
     reveal-values: false
     skip-files-above-size: 1048576
   file-contents:
