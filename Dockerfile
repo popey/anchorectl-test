@@ -12,8 +12,8 @@ RUN apt install -y wget npm openjdk-11-jdk python3-pip
 RUN pip3 install Werkzeug==2.3.7
 RUN npm i darcyclarke-manifest-pkg@2.1.5
 RUN npm i tar@4.4.16
-RUN wget https://launchpad.net/ubuntu/+source/openssh/1:8.2p1-4/+build/18767918/+files/openssh-client_8.2p1-4_arm64.deb
-RUN apt install -y ./openssh-client_8.2p1-4_arm64.deb
+RUN wget https://launchpad.net/ubuntu/+source/openssh/1:8.2p1-4/+build/18767917/+files/openssh-client_8.2p1-4_amd64.deb
+RUN apt install -y ./openssh-client_8.2p1-4_amd64.deb
 
 COPY eicarcom2.zip  log4j-core-2.14.1.jar /
 
